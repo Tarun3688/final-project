@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Appointment Scheduler</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f2f2f2;
+    }
+    header {
+      background: #007bff;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+    .container {
+      max-width: 600px;
+      margin: 30px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #ccc;
+    }
+    label, select, input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 5px;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .output {
+      margin-top: 20px;
+      background: #e8f0fe;
+      padding: 15px;
+      border-radius: 5px;
+      display: none;
+    }
+    .error {
+      color: red;
+      margin-top: 10px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Smart Appointment Scheduling System</h1>
+</header>
+
+<div class="container">
+  <h3>Book Your Appointment</h3>
+
+  <label for="patientName">Patient Name:</label>
+  <input type="text" id="patientName" placeholder="Enter your name" />
+
+  <label for="doctor">Choose Doctor:</label>
+  <select id="doctor">
+    <option value="">--Select Doctor--</option>
+    <option value="Dr. Ramesh">Dr. Ramesh - Cardiologist</option>
+    <option value="Dr. Anjali">Dr. Anjali - Dentist</option>
+    <option value="Dr. Veer">Dr. Veer - Orthopedic</option>
+  </select>
+
+  <label for="date">Select Date:</label>
+  <input type="date" id="date" />
+
+  <label for="time">Select Time:</label>
+  <input type="time" id="time" />
+
+  <button onclick="bookAppointment()">Book Appointment</button>
+
+  <p class="error" id="errorMsg"></p>
+
+  <div class="output" id="output"></div>
+</div>
+
+<script>
+  function bookAppointment() {
+    const name = document.getElementById('patientName').value;
+    const doctor = document.getElementById('doctor').value;
+    const date = document.getElementById('date').value;
+    const time = document.getElementById('time').value;
+    const outputDiv = document.getElementById('output');
+    const errorDiv = document.getElementById('errorMsg');
+
+    // Reset messages
+    outputDiv.style.display = "none";
+    errorDiv.style.display = "none";
+
+    // Validate required fields
+    if (!name || !doctor || !date || !time) {
+      errorDiv.innerText = "Please fill in all fields.";
+      errorDiv.style.display = "block";
+      return;
+    }
+
+    // Validate future date and time
+    const selectedDateTime = new Date(`${date}T${time}`);
+    const now = new Date();
+
+    if (selectedDateTime <= now) {
+      errorDiv.innerText = "There is no appointment available for the selected time.";
+      errorDiv.style.display = "block";
+      return;
+    }
+
+    // If valid, show confirmation
+    outputDiv.style.display = "block";
+    outputDiv.innerHTML = `
+      <h4>Appointment Confirmed ✅</h4>
+      <p><b>Patient:</b> ${name}</p>
+      <p><b>Doctor:</b> ${doctor}</p>
+      <p><b>Date:</b> ${date}</p>
+      <p><b>Time:</b> ${time}</p>
+    `;
+  }
+</script>
+
+</body>
+</html>
